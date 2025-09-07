@@ -36,7 +36,7 @@ export default class PlaylisterModel {
         this.tps = new jsTPS();
 
         // THE MODAL IS NOT CURRENTLY OPEN
-        this.confirmDialogOpen = false;
+        this.confirmDialogOpen = true;
 
         // PREVENTS LOADING THE WRONG LIST NAME IN THE STATUS BAR
         this.listNameBeingChanged = false;
@@ -76,7 +76,7 @@ export default class PlaylisterModel {
      */
     addTransactionToCreateSong() {
         // ADD A SONG
-        let song = new PlaylistSongPrototype("Untitled", "???", 2000, "dQw4w9WgXcQ");
+        let song = new PlaylistSongPrototype("Untitled", 2000, "???", "dQw4w9WgXcQ");
         let appendIndex = this.getPlaylistSize();
         let transaction = new CreateSong_Transaction(this, appendIndex, song);
         this.tps.processTransaction(transaction);
@@ -309,9 +309,10 @@ export default class PlaylisterModel {
                 for (let j = 0; j < listData.songs.length; j++) {
                     let songData = listData.songs[j];
                     let title = songData.title;
+                    let year = songData.year;
                     let artist = songData.artist;
                     let youTubeId = songData.youTubeId;
-                    songs[j] = new PlaylistSongPrototype(title, artist, youTubeId);
+                    songs[j] = new PlaylistSongPrototype(title, year, artist, youTubeId);
                 }
                 this.addNewList(listData.name, songs);
             }

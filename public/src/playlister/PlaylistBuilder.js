@@ -1,7 +1,7 @@
 import Playlist from "./Playlist.js";
 import PlaylistSongPrototype from "./PlaylistSongPrototype.js";
 /**
- * The PlaylistBuilder class employs the Buildler creational design pattern to manage
+ * The PlaylistBuilder class employs the Builder creational design pattern to manage
  * all instantiation of Playlists. It is the only place Playlist objects are to be
  * created. Note, this class is a singleton.
  * 
@@ -72,7 +72,7 @@ export default class PlaylistBuilder {
         newPlaylist.name = initName;
         newPlaylist.songs = [];
         initSongs.forEach(song => {
-            let newSong = new PlaylistSongPrototype(song.title, song.artist, song.youTubeId);
+            let newSong = new PlaylistSongPrototype(song.title, song.year, song.artist, song.youTubeId);
             newPlaylist.songs.push(newSong);
         });
         return newPlaylist;

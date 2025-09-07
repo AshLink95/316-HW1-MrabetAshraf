@@ -190,6 +190,10 @@ body {
   color: black;
 }
 
+.song-card-year {
+  color: black;
+}
+
 .song-card-artist {
   color: red;
 }
