@@ -57,6 +57,28 @@ export default class PlaylisterController {
      * are pressed in the three modals.
      */
     registerModalHandlers() {
+        // RESPOND TO THE USER CONFIRMING THE NEW EDIT SONG MODAL VIA THE CONFIRM BUTTON
+        document.getElementById("edit-song-confirm-button").onclick = (event) => {
+            // GET THE CHANGES
+            // let editSongModal = document.getElementById("edit-song-modal");
+            let newTitle = document.getElementById("edit-song-modal-title-textfield").value;
+            let newYear = document.getElementById("edit-song-modal-year-textfield").value;
+            let newArtist = document.getElementById("edit-song-modal-artist-textfield").value;
+            let newYouTubeId = document.getElementById("edit-song-modal-youTubeId-textfield").value;
+
+            // APPLY THE CHANGES
+            let songId = this.model.getEditSongIndex();
+            let song = this.model.getSong(songId);
+            this.model.editSong(song, newTitle, newYear, newArtist, newYouTubeId);
+
+            // ALLOW OTHER INTERACTIONS
+            this.model.toggleConfirmDialogOpen();
+
+            // CLOSE THE MODAL
+            let editSongModal = document.getElementById("edit-song-modal");
+            editSongModal.classList.remove("is-visible");
+        }
+
         // RESPOND TO THE USER CLOSING THE EDIT SONG MODAL VIA THE CANCEL BUTTON
         document.getElementById("edit-song-cancel-button").onclick = (event) => {
             // ALLOW OTHER INTERACTIONS

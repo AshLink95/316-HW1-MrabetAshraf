@@ -364,6 +364,30 @@ export default class PlaylisterModel {
     }
 
     /**
+     * Confirms changes made to a song
+     * 
+     * @param {number} index The location in the song to be edited
+     * @param {string} newTitle The new title in the song to be edited
+     * @param {number} newYear The new year in the song to be edited
+     * @param {string} newArtist The new artist in the song to be edited
+     * @param {string} newYoutubeId The new YouTube ID in the song to be edited
+     */
+    editSong(song, newTitle, newYear, newArtist, newYouTubeId) {
+        song.title = newTitle
+        song.year = newYear
+        song.artist = newArtist
+        song.youTubeId = newYouTubeId
+
+        // TODO: apply a transaction to enable undo/redo
+        // let transaction = new EditSong_Transaction(this.model, song, newTitle, newYear, newArtist, newYouTubeId);
+        // this.tps.processTransaction(transaction);
+        // this.view.updateToolbarButtons(this.hasCurrentList(), 
+        //                     this.confirmDialogOpen, this.tps.hasTransactionToDo(), this.tps.hasTransactionToUndo());
+
+        this.view.refreshSongCards(this.currentList);
+    }
+
+    /**
      * Renames the currently selected list using the provided name
      * 
      * @param {string} initName New name for the current list.
@@ -456,8 +480,8 @@ export default class PlaylisterModel {
 
     /**
      * Sorts the lists alphabetically (A-Z) by name. Note that this is done each time
-     * a new list is added or deleted or renamed as the lists are always kept in 
-     * sorted order.
+     * a new list is added or deleted or renamed or when a song's name changes as the
+     * lists are always kept in sorted order.
      */
     sortLists() {
         this.playlists.sort((listA, listB) => {
