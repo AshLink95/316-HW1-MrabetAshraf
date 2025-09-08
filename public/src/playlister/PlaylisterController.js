@@ -68,8 +68,7 @@ export default class PlaylisterController {
 
             // APPLY THE CHANGES
             let songId = this.model.getEditSongIndex();
-            let song = this.model.getSong(songId);
-            this.model.editSong(song, newTitle, newYear, newArtist, newYouTubeId);
+            this.model.addTransactionToEditSong(songId, newTitle, newYear, newArtist, newYouTubeId);
 
             // ALLOW OTHER INTERACTIONS
             this.model.toggleConfirmDialogOpen();

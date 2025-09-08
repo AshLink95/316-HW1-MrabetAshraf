@@ -4,6 +4,7 @@ import PlaylistSongPrototype from './PlaylistSongPrototype.js';
 import CreateSong_Transaction from "./transactions/CreateSong_Transaction.js";
 import MoveSong_Transaction from "./transactions/MoveSong_Transaction.js";
 import RemoveSong_Transaction from "./transactions/RemoveSong_Transaction.js";
+import EditSong_Transaction from './transactions/EditSong_Transaction.js';
 import PlaylistBuilder from './PlaylistBuilder.js';
 
 /**
@@ -111,6 +112,19 @@ export default class PlaylisterModel {
     }
 
     /**
+     * Adds an undoable transaction for removing a song to the transaction stack.
+     * 
+     * @param {number} index The index of the transaction to remove
+     */
+    addTransactionToEditSong(index, newTitle, newYear, newArtist, newYouTubeId) {
+        let song = this.getSong(index);
+        let transaction = new EditSong_Transaction(this, song, newTitle, newYear, newArtist, newYouTubeId);
+        this.tps.processTransaction(transaction);
+        this.view.updateToolbarButtons(this.hasCurrentList(), 
+                            this.confirmDialogOpen, this.tps.hasTransactionToDo(), this.tps.hasTransactionToUndo());
+    }
+
+    /**
      * Inserts the song argument into the playlist at index. Note, after being placed
      * this will rerendering the user interface to reflect the new song and will also
      * save the changes to local storage.
@@ -122,6 +136,53 @@ export default class PlaylisterModel {
         this.currentList.songs.splice(index, 0, song);
         this.view.refreshSongCards(this.currentList);
         this.saveLists();
+    }
+
+    /**
+     * Mutator method that moves the song from one index to another in the playlist. Note
+     * that once the song is moved in the model's data the view updates the UI and the
+     * updated playlist is saved to local storage.
+     * 
+     * @param {number} fromIndex The index from which to move the song
+     * @param {number} toIndex The index to which to move the song
+     */
+    moveSong(fromIndex, toIndex) {
+        if (this.hasCurrentList()) {
+            let tempArray = this.currentList.songs.filter((song, index) => index !== fromIndex);
+            tempArray.splice(toIndex, 0, this.currentList.getSongAt(fromIndex))
+            this.currentList.songs = tempArray;
+            this.view.refreshSongCards(this.currentList);
+        }
+        this.saveLists();
+    }
+
+    /**
+     * Removes the song at index from the currently loaded playlist
+     * 
+     * @param {number} index The location in the playlist of the song to add nothing 0 is the first song.
+     */
+    removeSong(index) {
+        this.currentList.songs.splice(index, 1);
+        this.view.refreshSongCards(this.currentList);
+        this.saveLists();
+    }
+
+    /**
+     * Changes the properties of a song
+     * 
+     * @param {PlaylistSongPrototype} song The song to be edited
+     * @param {string} newTitle The new title in the song to be edited
+     * @param {number} newYear The new year in the song to be edited
+     * @param {string} newArtist The new artist in the song to be edited
+     * @param {string} newYoutubeId The new YouTube ID in the song to be edited
+     */
+    editSong(song, newTitle, newYear, newArtist, newYouTubeId) {
+        song.title = newTitle
+        song.year = newYear
+        song.artist = newArtist
+        song.youTubeId = newYouTubeId
+
+        this.view.refreshSongCards(this.currentList);
     }
 
     /**
@@ -323,24 +384,6 @@ export default class PlaylisterModel {
     }
 
     /**
-     * Mutator method that moves the song from one index to another in the playlist. Note
-     * that once the song is moved in the model's data the view updates the UI and the
-     * updated playlist is saved to local storage.
-     * 
-     * @param {number} fromIndex The index from which to move the song
-     * @param {number} toIndex The index to which to move the song
-     */
-    moveSong(fromIndex, toIndex) {
-        if (this.hasCurrentList()) {
-            let tempArray = this.currentList.songs.filter((song, index) => index !== fromIndex);
-            tempArray.splice(toIndex, 0, this.currentList.getSongAt(fromIndex))
-            this.currentList.songs = tempArray;
-            this.view.refreshSongCards(this.currentList);
-        }
-        this.saveLists();
-    }
-
-    /**
      * Performs a redo operation, which depending on the transaction at the top of the
      * stack is, will modify the loaded playlist in some way and force an update to the UI.
      */
@@ -350,41 +393,6 @@ export default class PlaylisterModel {
             this.view.updateToolbarButtons(this.hasCurrentList(), 
                             this.confirmDialogOpen, this.tps.hasTransactionToDo(), this.tps.hasTransactionToUndo());
         }
-    }
-
-    /**
-     * Removes the song at index from the currently loaded playlist
-     * 
-     * @param {number} index The location in the playlist of the song to add nothing 0 is the first song.
-     */
-    removeSong(index) {
-        this.currentList.songs.splice(index, 1);
-        this.view.refreshSongCards(this.currentList);
-        this.saveLists();
-    }
-
-    /**
-     * Confirms changes made to a song
-     * 
-     * @param {number} index The location in the song to be edited
-     * @param {string} newTitle The new title in the song to be edited
-     * @param {number} newYear The new year in the song to be edited
-     * @param {string} newArtist The new artist in the song to be edited
-     * @param {string} newYoutubeId The new YouTube ID in the song to be edited
-     */
-    editSong(song, newTitle, newYear, newArtist, newYouTubeId) {
-        song.title = newTitle
-        song.year = newYear
-        song.artist = newArtist
-        song.youTubeId = newYouTubeId
-
-        // TODO: apply a transaction to enable undo/redo
-        // let transaction = new EditSong_Transaction(this.model, song, newTitle, newYear, newArtist, newYouTubeId);
-        // this.tps.processTransaction(transaction);
-        // this.view.updateToolbarButtons(this.hasCurrentList(), 
-        //                     this.confirmDialogOpen, this.tps.hasTransactionToDo(), this.tps.hasTransactionToUndo());
-
-        this.view.refreshSongCards(this.currentList);
     }
 
     /**
@@ -479,9 +487,9 @@ export default class PlaylisterModel {
     }
 
     /**
-     * Sorts the lists alphabetically (A-Z) by name. Note that this is done each time
-     * a new list is added or deleted or renamed or when a song's name changes as the
-     * lists are always kept in sorted order.
+     * Sorts the lists alphabetically (A-Z) by name. Note that this is done each
+     * time a new list is added or deleted or renamed as the lists are always kept
+     * in sorted order.
      */
     sortLists() {
         this.playlists.sort((listA, listB) => {
