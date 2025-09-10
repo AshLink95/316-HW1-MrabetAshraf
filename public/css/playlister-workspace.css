@@ -186,12 +186,12 @@ body {
   color: var(--swatch-link-active);
 }
 
-.song-card-by {
+.song-card-by .song-card-year {
   color: black;
 }
 
-.song-card-year {
-  color: black;
+.song-card-by:hover .song-card-year:hover {
+  color: white;
 }
 
 .song-card-artist {

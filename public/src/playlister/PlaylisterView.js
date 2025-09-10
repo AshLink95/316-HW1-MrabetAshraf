@@ -178,15 +178,15 @@ export default class PlaylisterView {
             youTubeLink.innerHTML = song.title;
 
             let yearSpan = document.createElement("span");
-            yearSpan.class = "song-card-year";
+            yearSpan.className = "song-card-year";
             yearSpan.innerHTML = " ("+song.year+") ";
 
             let bySpan = document.createElement("span");
-            bySpan.class = "song-card-by";
+            bySpan.className = "song-card-by";
             bySpan.innerHTML = " by ";
 
             let artistSpan = document.createElement("span");
-            artistSpan.class = "song-card-artist";
+            artistSpan.className = "song-card-artist";
             artistSpan.innerHTML = song.artist;
 
             // PUT THE CONTENT INTO THE CARD
