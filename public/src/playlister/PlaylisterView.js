@@ -267,13 +267,32 @@ export default class PlaylisterView {
      * buttons cannot be used they are disabled.
      */
     updateToolbarButtons(hasCurrentList, isConfirmDialogOpen, hasTransactionToDo, hasTransactionToUndo) {
-        this.enableButton("close-button");
-        this.enableButton("add-song-button");
+        if (hasCurrentList) {
+            this.enableButton("close-button");
+            this.enableButton("add-song-button");
+        } else {
+            this.disableButton("close-button");
+            this.disableButton("add-song-button");
+        }
+
+        // if (!isConfirmDialogOpen) { //TODO: update isConfirmDialogOpen whenever an action is being performed (the 2 song menus + editing pl names)
+        //     this.disableButton("close-button");
+        //     this.disableButton("add-song-button");
+        // } else {
+        //     this.enableButton("close-button");
+        //     this.enableButton("add-song-button");
+        // }
+
         if (!hasTransactionToUndo) {
             this.disableButton("undo-button");
-        }
-        else {
+        } else {
             this.enableButton("undo-button");
+        }
+
+        if (hasTransactionToDo > 0) {
+            this.enableButton("redo-button");
+        } else {
+            this.disableButton("redo-button");
         }
     }
 }
