@@ -26,7 +26,7 @@ export default class PlaylisterView {
      * 
      * @param {Playlist} newList The list to be added.
      */
-    appendListToView(newList) {
+    appendListToView(newList) { //TODO: add and duplicate buttons
         // EACH CARD WILL HAVE A UNIQUE ID
         let listId = "playlist-card-" + newList.id;
 
