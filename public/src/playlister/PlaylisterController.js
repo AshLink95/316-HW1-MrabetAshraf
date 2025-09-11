@@ -183,6 +183,8 @@ export default class PlaylisterController {
 
             // OPEN UP THE DIALOG
             deleteListModal.classList.add("is-visible");
+
+            // IGNORE ALL NON-MODAL EVENTS
             this.model.toggleConfirmDialogOpen();
         }
         // FOR RENAMING THE LIST NAME
@@ -244,12 +246,12 @@ export default class PlaylisterController {
                 document.getElementById("edit-song-modal-artist-textfield").value = song.artist;
                 document.getElementById("edit-song-modal-youTubeId-textfield").value = song.youTubeId;
 
+                // IGNORE ALL NON-MODAL EVENTS
+                this.model.toggleConfirmDialogOpen();
+
                 // OPEN UP THE MODAL
                 let editSongModal = document.getElementById("edit-song-modal");
                 editSongModal.classList.add("is-visible");
-
-                // IGNORE ALL NON-MODAL EVENTS
-                this.model.toggleConfirmDialogOpen();
             }
 
             // USER WANTS TO REMOVE A SONG FROM THE PLAYLIST
@@ -257,6 +259,9 @@ export default class PlaylisterController {
             removeSongButton.onclick = (event) => {
                 // DON'T PROPOGATE THE EVENT
                 this.ignoreParentClick(event);
+
+                // IGNORE ALL NON-MODAL EVENTS
+                this.model.toggleConfirmDialogOpen();
 
                 // RECORD WHICH SONG SO THE MODAL KNOWS AND UPDATE THE MODAL TEXT
                 let songIndex = Number.parseInt(event.target.id.split("-")[2]);               
@@ -274,7 +279,6 @@ export default class PlaylisterController {
 
                 // OPEN UP THE DIALOG
                 deleteSongModal.classList.add("is-visible");
-                this.model.toggleConfirmDialogOpen();
             }
 
             // NOW SETUP ALL CARD DRAGGING HANDLERS AS THE USER MAY WISH TO CHANGE

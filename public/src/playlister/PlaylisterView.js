@@ -275,13 +275,13 @@ export default class PlaylisterView {
             this.disableButton("add-song-button");
         }
 
-        // if (!isConfirmDialogOpen) { //TODO: update isConfirmDialogOpen whenever an action is being performed (the 2 song menus + editing pl names)
-        //     this.disableButton("close-button");
-        //     this.disableButton("add-song-button");
-        // } else {
-        //     this.enableButton("close-button");
-        //     this.enableButton("add-song-button");
-        // }
+        if (!isConfirmDialogOpen) {
+            this.disableButton("close-button");
+            this.disableButton("add-song-button");
+        } else {
+            this.enableButton("close-button");
+            this.enableButton("add-song-button");
+        }
 
         if (!hasTransactionToUndo) {
             this.disableButton("undo-button");
