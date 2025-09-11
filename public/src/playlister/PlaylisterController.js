@@ -115,6 +115,32 @@ export default class PlaylisterController {
             let deleteListModal = document.getElementById("delete-list-modal");
             deleteListModal.classList.remove("is-visible");
         }
+
+        // RESPOND TO THE USER CONFIRMING THE DELETE SONG MODAL VIA THE CONFIRM BUTTON
+        document.getElementById("delete-song-confirm-button").onclick = (event) => {
+            // SONG IDENTIFIER, OBTAINED UPON BUTTON PRESS
+            let songIndex = this.model.getDeleteSongIndex();
+
+            // PROCESS THE REMOVE SONG EVENT
+            this.model.addTransactionToRemoveSong(songIndex);
+
+            // ALLOW OTHER INTERACTIONS
+            this.model.toggleConfirmDialogOpen();
+
+            // CLOSE THE MODAL
+            let deleteSongModal = document.getElementById("delete-song-modal");
+            deleteSongModal.classList.remove("is-visible");
+        }
+
+        // RESPOND TO THE USER CLOSING THE DELETE SONG MODAL VIA THE CANCEL BUTTON
+        document.getElementById("delete-song-cancel-button").onclick = (event) => {
+            // ALLOW OTHER INTERACTIONS
+            this.model.toggleConfirmDialogOpen();
+
+            // CLOSE THE MODAL
+            let deleteListModal = document.getElementById("delete-song-modal");
+            deleteListModal.classList.remove("is-visible");
+        }
     }
 
     /**
@@ -234,9 +260,21 @@ export default class PlaylisterController {
 
                 // RECORD WHICH SONG SO THE MODAL KNOWS AND UPDATE THE MODAL TEXT
                 let songIndex = Number.parseInt(event.target.id.split("-")[2]);               
+                this.model.setDeleteSongIndex(songIndex);
 
-                // PROCESS THE REMOVE SONG EVENT
-                this.model.addTransactionToRemoveSong(songIndex);
+                // SET THE SONG TO WRITE THE TITLE PROPERLY
+                let song = this.model.getSong(songIndex);
+
+                // VERIFY THAT THE USER REALLY WANTS TO DELETE THE PLAYLIST
+                // THE CODE BELOW OPENS UP THE LIST DELETE VERIFICATION DIALOG
+                let deleteSpan = document.getElementById("delete-song-span");
+                deleteSpan.innerHTML = "";
+                deleteSpan.appendChild(document.createTextNode(song.title));
+                let deleteSongModal = document.getElementById("delete-song-modal");
+
+                // OPEN UP THE DIALOG
+                deleteSongModal.classList.add("is-visible");
+                this.model.toggleConfirmDialogOpen();
             }
 
             // NOW SETUP ALL CARD DRAGGING HANDLERS AS THE USER MAY WISH TO CHANGE

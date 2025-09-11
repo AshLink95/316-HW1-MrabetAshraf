@@ -213,6 +213,15 @@ export default class PlaylisterModel {
         return this.editSongIndex;
     }
 
+
+    /**
+     * Accessor method for getting the index of the song whose deletion is being verified.
+     * This represents the song edited via a modal.
+     */
+    getDeleteSongIndex() {
+        return this.deleteSongIndex;
+    }
+
     /**
      * Accessor method for getting the playlist at index
      * 
@@ -459,6 +468,16 @@ export default class PlaylisterModel {
      */
     setEditSongIndex(initIndex) {
         this.editSongIndex = initIndex;
+    }
+
+    /**
+     * Mutator method for setting the index of the song whose deletion is being verified,
+     * which is used such that the dialog event handler can coordinate a proper response.
+     * 
+     * @param {number} initIndex The index of thte song being edited in the dialog.
+     */
+    setDeleteSongIndex(initIndex) {
+        this.deleteSongIndex = initIndex;
     }
 
     /**
