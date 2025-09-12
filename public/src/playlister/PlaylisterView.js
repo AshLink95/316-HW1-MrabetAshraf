@@ -26,7 +26,7 @@ export default class PlaylisterView {
      * 
      * @param {Playlist} newList The list to be added.
      */
-    appendListToView(newList) { //TODO: add and duplicate buttons
+    appendListToView(newList) {
         // EACH CARD WILL HAVE A UNIQUE ID
         let listId = "playlist-card-" + newList.id;
 
@@ -41,6 +41,7 @@ export default class PlaylisterView {
         let textInput = playlistCard.querySelector("#playlist-card-text-input-");
         textInput.id += newList.id;
 
+        playlistCard.querySelector('input[id^="duplicate-list-button-"]').id += newList.id;
         playlistCard.querySelector('input[id^="delete-list-button-"]').id += newList.id;
 
         playlistCard.hidden = false;
@@ -58,7 +59,7 @@ export default class PlaylisterView {
      * done whenever a list is closed.
     */
     clearWorkspace() {
-        // REMOVE THE ITEMS        
+        // REMOVE THE ITEMS
         let itemsDiv = document.getElementById("song-cards");
         itemsDiv.innerHTML = "";
     }
@@ -202,7 +203,7 @@ export default class PlaylisterView {
             deleteButton.setAttribute("type", "button");
             deleteButton.setAttribute("id", "remove-song-" + i);
             deleteButton.setAttribute("class", "song-card-button");
-            deleteButton.setAttribute("value", "\u2715");
+            deleteButton.setAttribute("value", "✗");
             itemDiv.appendChild(deleteButton);
 
             // AND PUT THE CARD INTO THE UI
@@ -278,9 +279,11 @@ export default class PlaylisterView {
         if (!isConfirmDialogOpen) {
             this.disableButton("close-button");
             this.disableButton("add-song-button");
+            this.disableButton("add-list-button")
         } else {
             this.enableButton("close-button");
             this.enableButton("add-song-button");
+            this.enableButton("add-list-button")
         }
 
         if (!hasTransactionToUndo) {

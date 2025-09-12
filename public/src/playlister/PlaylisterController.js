@@ -153,6 +153,10 @@ export default class PlaylisterController {
      * to register event handling.
     */
     registerPlaylistCardHandlers(id) {
+        // HANDLES CREATING A PLAYLIST
+        document.getElementById("add-list-button").onclick = (event) => {
+            this.model.addNewList("Untitled", []);
+        }
         // HANDLES SELECTING A PLAYLIST
         document.getElementById("playlist-card-" + id).onmousedown = (event) => {
             if (!this.model.isListNameBeingChanged()) {
@@ -186,6 +190,20 @@ export default class PlaylisterController {
 
             // IGNORE ALL NON-MODAL EVENTS
             this.model.toggleConfirmDialogOpen();
+        }
+        // HANDLES DUPLICATING A PLAYLIST
+        document.getElementById("duplicate-list-button-" + id).onclick = (event) => {
+            // GET ORIGINAL LIST ID
+            this.listToDeleteIndex = this.model.getListIndex(id);
+
+            // GET ORIGINAL LIST NAME
+            let ogListName = this.model.getList(this.listToDeleteIndex).getName();
+
+            // GET ORIGINAL LIST SONGS
+            let ogListSongs = this.model.currentList.songs;
+
+            // CLONE THE ORIGINAL LIST
+            this.model.addNewList(ogListName, ogListSongs);
         }
         // FOR RENAMING THE LIST NAME
         document.getElementById("playlist-card-" + id).ondblclick = (event) => {
