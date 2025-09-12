@@ -203,7 +203,7 @@ export default class PlaylisterController {
             let ogListSongs = this.model.currentList.songs;
 
             // CLONE THE ORIGINAL LIST
-            this.model.addNewList(ogListName, ogListSongs);
+            this.model.addNewList(ogListName+" (Copy)", ogListSongs);
         }
         // FOR RENAMING THE LIST NAME
         document.getElementById("playlist-card-" + id).ondblclick = (event) => {
