@@ -268,24 +268,6 @@ export default class PlaylisterView {
      * buttons cannot be used they are disabled.
      */
     updateToolbarButtons(hasCurrentList, isConfirmDialogOpen, hasTransactionToDo, hasTransactionToUndo) {
-        if (hasCurrentList) {
-            this.enableButton("close-button");
-            this.enableButton("add-song-button");
-        } else {
-            this.disableButton("close-button");
-            this.disableButton("add-song-button");
-        }
-
-        if (!isConfirmDialogOpen) {
-            this.disableButton("close-button");
-            this.disableButton("add-song-button");
-            this.disableButton("add-list-button")
-        } else {
-            this.enableButton("close-button");
-            this.enableButton("add-song-button");
-            this.enableButton("add-list-button")
-        }
-
         if (!hasTransactionToUndo) {
             this.disableButton("undo-button");
         } else {
@@ -296,6 +278,29 @@ export default class PlaylisterView {
             this.enableButton("redo-button");
         } else {
             this.disableButton("redo-button");
+        }
+        if (hasCurrentList) {
+            this.enableButton("close-button");
+            this.enableButton("add-song-button");
+        } else {
+            this.disableButton("close-button");
+            this.disableButton("add-song-button");
+            if (!isConfirmDialogOpen) {
+                this.disableButton("add-list-button")
+            } else {
+                this.enableButton("add-list-button")
+            }
+            return
+        }
+
+        if (!isConfirmDialogOpen) {
+            this.disableButton("close-button");
+            this.disableButton("add-song-button");
+            this.disableButton("add-list-button")
+        } else {
+            this.enableButton("close-button");
+            this.enableButton("add-song-button");
+            this.enableButton("add-list-button")
         }
     }
 }
